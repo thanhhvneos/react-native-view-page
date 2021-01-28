@@ -52,22 +52,23 @@ export default ({
 
     // update new page index
     useEffect(() => {
-        if (pageIndex != page) setTimeout(() => {
-            scrollToPage(pageIndex)
-        }, 100)
+        if (pageIndex != page)
+            scrollToPage(pageIndex, false)
     }, [pageIndex])
 
     // actions
+    const scrollToPage = (page: number, animated = true) => {
+        if (page >= 0 && page <= COUNT_OF_CHILDREN - 1) {
+            scroll?.current?.scrollTo({ x: page * widthSize, animated })
+            if (animated == false) setPage(page)
+        }
+    }
+
+    // note: only come here if scrollTo({animated: true}) or swipe
     const onMomentumScrollEnd = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         const { x } = event.nativeEvent.contentOffset
         const newPage = Math.floor(x / widthSize)
         setPage(newPage)
-    }
-
-    const scrollToPage = (page: number, animated = true) => {
-        if (page <= COUNT_OF_CHILDREN - 1 || page >= 0) {
-            scroll?.current?.scrollTo({ x: page * widthSize, animated })
-        }
     }
 
     // views
@@ -126,10 +127,6 @@ export default ({
                 (styleDotActive ? styleDotActive : { ...styles.dot, ...styles.dotActive })}
         />
     }
-
-    // if (loading) return <View style={styles.loadingView}>
-    //     <ActivityIndicator size='large' color={colorPrimary}/>
-    // </View>
 
     return <View
         style={{ width: widthSize, ...style }}

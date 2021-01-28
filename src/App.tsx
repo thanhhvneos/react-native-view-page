@@ -14,10 +14,8 @@ const DATA = [{
     backgroundColor: '#465465'
 }]
 
-
-
 const App = () => {
-    const [index, setIndex] = useState(0)
+    const [index, setIndex] = useState(-1)
     const [data, setData] = useState(DATA)
 
     // effect
@@ -26,7 +24,7 @@ const App = () => {
     }, [])
 
     useEffect(() => {
-        saveStatusRestroom(index)
+        if (index != -1) saveStatusRestroom(index)
     }, [index])
 
     // actions
